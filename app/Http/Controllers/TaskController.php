@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskCreated;
 use App\Http\Resources\TaskResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Task;
@@ -56,8 +57,11 @@ class TaskController extends Controller
             return ApiResponse::make([], collect($validator->errors()->messages()), [], 422)->response();
         }
 
+        $task = $taskService->create($request);
+        event(new TaskCreated($task));
+
         return ApiResponse::make(
-            data: new TaskResource($taskService->create($request)),
+            data: new TaskResource($task),
             statusCode: 201
         )->response();
     }

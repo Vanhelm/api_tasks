@@ -23,4 +23,9 @@ class Task extends Model implements HasMedia
     {
         $this->addMediaCollection('files');
     }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
